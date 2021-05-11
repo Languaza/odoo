@@ -14,9 +14,10 @@
 # Arma Gedonsky <armagedonsky@hot.ee>, 2020
 # Helen Sulaoja <helen@avalah.ee>, 2020
 # Egon Raamat <egon@avalah.ee>, 2020
-# Eneli Õigus <enelioigus@gmail.com>, 2020
-# Piia Paurson <piia@avalah.ee>, 2020
 # Andre Roomet <andreroomet@gmail.com>, 2021
+# Eneli Õigus <enelioigus@gmail.com>, 2021
+# Piia Paurson <piia@avalah.ee>, 2021
+# Martin Talts <martin.t@avalah.ee>, 2021
 # Triine Aavik <triine@avalah.ee>, 2021
 # 
 msgid ""
@@ -587,7 +588,7 @@ msgstr "Arhiveeri"
 #: code:addons/web/static/src/xml/kanban.xml:0
 #, python-format
 msgid "Archive All"
-msgstr ""
+msgstr "Arhiveeri kõik"
 
 #. module: web
 #. openerp-web
@@ -1799,7 +1800,7 @@ msgstr ""
 #. module: web
 #: model:ir.model,name:web.model_ir_http
 msgid "HTTP Routing"
-msgstr ""
+msgstr "HTTP Routing"
 
 #. module: web
 #. openerp-web
@@ -2890,7 +2891,7 @@ msgstr "Palun vali väljad, et salvestada ekspordi list ..."
 #: code:addons/web/static/src/xml/base.xml:0
 #, python-format
 msgid "Please update translations of :"
-msgstr ""
+msgstr "Palun uuendage tõlget:"
 
 #. module: web
 #. openerp-web
@@ -3040,7 +3041,7 @@ msgstr "Kiirotsing: %s"
 #. module: web
 #: model:ir.model,name:web.model_ir_qweb_field_image
 msgid "Qweb Field Image"
-msgstr ""
+msgstr "Qweb Pildi Väli"
 
 #. module: web
 #. openerp-web
@@ -3856,7 +3857,7 @@ msgstr ""
 #: code:addons/web/static/src/js/widgets/translation_dialog.js:0
 #, python-format
 msgid "Translate: "
-msgstr ""
+msgstr "Tõlked:"
 
 #. module: web
 #. openerp-web
