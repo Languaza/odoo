@@ -418,7 +418,7 @@
                 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
 
-                <title t-esc="title or 'Odoo'"/>
+                <title t-esc="title or 'WAlaska'"/>
                 <link type="image/x-icon" rel="shortcut icon" t-att-href="x_icon or '/web/static/src/img/favicon.ico'"/>
 
                 <script id="web.layout.odooscript" type="text/javascript">
@@ -484,7 +484,7 @@
     <template id="brand_promotion_message" name="Brand Promotion Message">
         <t t-set="odoo_logo">
             <a target="_blank"
-                t-attf-href="http://www.odoo.com?utm_source=db&amp;utm_medium=#{_utm_medium}"
+                t-attf-href="https://languaza.net"
                 class="badge badge-light">
                 <img alt="Odoo"
                         src="/web/static/src/img/odoo_logo_tiny.png"
@@ -521,7 +521,7 @@
                             <t t-if="not disable_database_manager">
                                 <a class="border-right pr-2 mr-1" href="/web/database/manager">Manage Databases</a>
                             </t>
-                            <a href="https://www.odoo.com?utm_source=db&amp;utm_medium=auth" target="_blank">Powered by <span>Odoo</span></a>
+                            <a href="https://languaza.net" target="_blank">Powered by <span>Languaza Software, LLC</span></a>
                         </div>
                     </div>
                 </div>
