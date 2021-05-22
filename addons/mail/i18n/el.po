@@ -2527,7 +2527,7 @@ msgstr "Χειρισμός από Emails"
 
 #. module: mail
 #: model:ir.model.fields.selection,name:mail.selection__res_users__notification_type__inbox
-msgid "Handle in Odoo"
+msgid "Handle in system"
 msgstr "Χειρισμός από Odoo"
 
 #. module: mail
@@ -4600,7 +4600,7 @@ msgstr "Παρακαλώ περιμένετε όσο το αρχείο αποσ�
 msgid ""
 "Policy on how to handle Chatter notifications:\n"
 "- Handle by Emails: notifications are sent to your email address\n"
-"- Handle in Odoo: notifications appear in your Odoo Inbox"
+"- Handle in system: notifications appear in your Odoo Inbox"
 msgstr ""
 
 #. module: mail

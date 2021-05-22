@@ -2038,7 +2038,7 @@ msgstr ""
 
 #. module: mail
 #: selection:res.users,notification_type:0
-msgid "Handle in Odoo"
+msgid "Handle in system"
 msgstr ""
 
 #. module: mail

@@ -2488,7 +2488,7 @@ msgstr "メール送信"
 
 #. module: mail
 #: model:ir.model.fields.selection,name:mail.selection__res_users__notification_type__inbox
-msgid "Handle in Odoo"
+msgid "Handle in system"
 msgstr "Odoo内にとどめる"
 
 #. module: mail
@@ -4510,7 +4510,7 @@ msgstr "ファイルがアップロードされている間お待ちください
 msgid ""
 "Policy on how to handle Chatter notifications:\n"
 "- Handle by Emails: notifications are sent to your email address\n"
-"- Handle in Odoo: notifications appear in your Odoo Inbox"
+"- Handle in system: notifications appear in your Odoo Inbox"
 msgstr ""
 "Chatter通知の処理方法に関するポリシー:\n"
 "-電子メールによる処理:通知は電子メールアドレスに送信されます\n"
