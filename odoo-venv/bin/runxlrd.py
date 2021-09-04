@@ -1,4 +1,4 @@
-#!/opt/odoo/odoo/odoo-venv/bin/python3
+#!/opt/odoo12/odoo/odoo-venv/bin/python3
 # Copyright (c) 2005-2012 Stephen John Machin, Lingfo Pty Ltd
 # This script is part of the xlrd package, which is released under a
 # BSD-style licence.
@@ -36,9 +36,9 @@ if __name__ == "__main__":
 
     import xlrd
     import sys, time, glob, traceback, gc
-
+    
     from xlrd.timemachine import xrange, REPR
-
+    
 
     class LogHandler(object):
 
@@ -46,17 +46,17 @@ if __name__ == "__main__":
             self.logfileobj = logfileobj
             self.fileheading = None
             self.shown = 0
-
+            
         def setfileheading(self, fileheading):
             self.fileheading = fileheading
             self.shown = 0
-
+            
         def write(self, text):
             if self.fileheading and not self.shown:
                 self.logfileobj.write(self.fileheading)
                 self.shown = 1
             self.logfileobj.write(text)
-
+        
     null_cell = xlrd.empty_cell
 
     def show_row(bk, sh, rowx, colrange, printit):
@@ -113,7 +113,7 @@ if __name__ == "__main__":
         if bk.formatting_info:
             print("FORMATs: %d, FONTs: %d, XFs: %d"
                 % (len(bk.format_list), len(bk.font_list), len(bk.xf_list)))
-        if not options.suppress_timing:
+        if not options.suppress_timing:        
             print("Load time: %.2f seconds (stage 1) %.2f seconds (stage 2)"
                 % (bk.load_time_stage_1, bk.load_time_stage_2))
         print()

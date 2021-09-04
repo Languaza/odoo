@@ -1,11 +1,11 @@
-#!/opt/odoo/odoo/odoo-venv/bin/python3
+#!/opt/odoo12/odoo/odoo-venv/bin/python3
 
-# $Id: rst2xetex.py 7847 2015-03-17 17:30:47Z milde $
+# $Id: rst2xetex.py 7038 2011-05-19 09:12:02Z milde $
 # Author: Guenter Milde
 # Copyright: This module has been placed in the public domain.
 
 """
-A minimal front end to the Docutils Publisher, producing Lua/XeLaTeX code.
+A minimal front end to the Docutils Publisher, producing XeLaTeX source code.
 """
 
 try:
@@ -16,9 +16,8 @@ except:
 
 from docutils.core import publish_cmdline
 
-description = ('Generates LaTeX documents from standalone reStructuredText '
-               'sources for compilation with the Unicode-aware TeX variants '
-               'XeLaTeX or LuaLaTeX. '
+description = ('Generates XeLaTeX documents from standalone reStructuredText '
+               'sources. '
                'Reads from <source> (default is stdin) and writes to '
                '<destination> (default is stdout).  See '
                '<http://docutils.sourceforge.net/docs/user/latex.html> for '

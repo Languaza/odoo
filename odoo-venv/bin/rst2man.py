@@ -1,4 +1,4 @@
-#!/opt/odoo/odoo/odoo-venv/bin/python3
+#!/opt/odoo12/odoo/odoo-venv/bin/python3
 
 # Author: 
 # Contact: grubert@users.sf.net

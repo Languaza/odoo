@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/opt/odoo/odoo/odoo-venv"
+set -gx VIRTUAL_ENV "/opt/odoo12/odoo/odoo-venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
@@ -52,7 +52,7 @@ if test -z "$VIRTUAL_ENV_DISABLE_PROMPT"
         set -l old_status $status
 
         # Prompt override?
-        if test -n "(odoo-venv) "
+        if test -n "(odoo-venv) "            
             printf "%s%s" "(odoo-venv) " (set_color normal)
         else
             # ...Otherwise, prepend env

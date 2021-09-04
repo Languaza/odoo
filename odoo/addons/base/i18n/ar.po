@@ -9798,12 +9798,12 @@ msgstr "جزيرة الكريسماس"
 #: model_terms:ir.ui.view,arch_db:base.view_partner_short_form
 #: model_terms:ir.ui.view,arch_db:base.view_res_bank_form
 msgid "City"
-msgstr "المدينة"
+msgstr "المنطقة"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_base_address_city
 msgid "City Addresses"
-msgstr "عناوين المدينة"
+msgstr "عناوين المناطق"
 
 #. module: base
 #: selection:ir.logging,type:0
@@ -21728,7 +21728,7 @@ msgstr "ابدأ الإعداد"
 #: model_terms:ir.ui.view,arch_db:base.view_partner_short_form
 #: model_terms:ir.ui.view,arch_db:base.view_res_bank_form
 msgid "State"
-msgstr "الحالة"
+msgstr "المحافظة"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_country_state__code
@@ -21738,7 +21738,7 @@ msgstr "كود الولاية"
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_country_state__name
 msgid "State Name"
-msgstr "اسم الولاية"
+msgstr "اسم المحافظة"
 
 #. module: base
 #: model:res.country,name:base.ps
@@ -22693,7 +22693,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:base.field_res_partner__vat
 #: model:ir.model.fields,field_description:base.field_res_users__vat
 msgid "Tax ID"
-msgstr "رقم الضرائب"
+msgstr "رقم البطاقة الضريبية"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_website_sale_taxcloud_delivery
@@ -23273,7 +23273,7 @@ msgstr ""
 #. module: base
 #: model:ir.model.fields,help:base.field_res_country_state__code
 msgid "The state code."
-msgstr "كود الولاية."
+msgstr "كود المحافظة."
 
 #. module: base
 #: code:addons/base/models/ir_model.py:531
@@ -23577,7 +23577,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:base.field_res_partner_title__name
 #: model:ir.model.fields,field_description:base.field_res_users__title
 msgid "Title"
-msgstr "العنوان"
+msgstr "اللقب"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_sequence_date_range__date_to
