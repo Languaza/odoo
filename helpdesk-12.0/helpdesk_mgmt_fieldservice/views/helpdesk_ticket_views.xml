@@ -33,7 +33,7 @@
                     </page>
             </page>
             <field name="partner_id" position="before">
-                <field name="fsm_location_id"/>
+                <field name="fsm_location_id" invisible="1"/>
                 <field name="all_orders_closed" invisible="1"/>
             </field>
         </field>

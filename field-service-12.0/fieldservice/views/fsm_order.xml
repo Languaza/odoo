@@ -42,15 +42,23 @@
                                    options="{'color_field': 'color', 'no_create_edit': True}"/>
                         </group>
                         <group>
-                            <field name="location_id"/>
+                            <field name="location_id" />
                             <field name="territory_id" invisible='1'/>
                             <field name="branch_id" invisible='1'/>
                             <field name="district_id" invisible='1'/>
                             <field name="region_id" invisible='1'/>
                             <field name="team_id"
-                                   groups="fieldservice.group_fsm_team"/>
-                            <field name="person_id"/>
+                                   groups="fieldservice.group_fsm_team" invisible="1"/>
+                            <field name="person_id"  groups="fieldservice.group_fsm_manager"/>
                             <field name="internal_type" invisible="1"/>
+                            <field name="product_sn"/>
+                            <field name="Product_color"/>
+                            <field name="Product_production_date"/>
+                            <field name="guarantee_limit"/>
+                            <field name="Product_image"/>
+                            <field name="warranty_image"/>
+                            <field name="plate_image"/>
+
                             <field name="equipment_id"
                                    attrs="{'invisible':[('internal_type', 'not in',['repair', 'maintenance'])]}"
                                    groups="fieldservice.group_fsm_equipment"
@@ -59,6 +67,10 @@
                             <field name="company_id"
                                    options="{'no_create': True}"
                                    groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="image" widget="signature" attrs="{'readonly': [('image', '!=', False)]}" force_save="1" />
+
                         </group>
                     </group>
                     <group string="Description" name="description_grp">
@@ -84,7 +96,7 @@
                                            readonly="1"/>
                                 </group>
                             </group>
-                            <group string="Request Workers" name="request_workers">
+                            <group string="Request Workers" name="request_workers" invisible="1">
                                 <field name="person_ids" widget="many2many"
                                        nolabel="1"
                                        context="{'search_default_location_ids': location_id}">

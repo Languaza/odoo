@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from datetime import datetime
 
 from odoo import api, fields, models, _
 from odoo.addons import decimal_precision as dp
 from odoo.exceptions import UserError, ValidationError
-from odoo.tools import float_compare
+from odoo.tools import float_compare, DEFAULT_SERVER_DATE_FORMAT
+from datetime import *
 
 
 class StockMove(models.Model):
     _inherit = 'stock.move'
-
     repair_id = fields.Many2one('repair.order')
 
 
@@ -28,21 +27,46 @@ class Repair(models.Model):
             return warehouse.lot_stock_id.id
         return False
 
+    user_id = fields.Many2one(
+        'res.users',
+        string='مسؤل التصليح')
+    factory_send_date = fields.Date('تاريخ الأرسال للمصنع', states={'confirmed': [('readonly', True)]})
+    factory_return_date = fields.Date('تاريخ الرجوع من للمصنع', states={'confirmed': [('readonly', True)]})
+    product_entry_date = fields.Date('تاريخ دخول المنتج للورشه', states={'confirmed': [('readonly', True)]})
+    product_exit_date = fields.Date('تاريخ خروج المنتج من الورشه', states={'confirmed': [('readonly', True)]})
+    product_out_delivery = fields.Date('تاريخ الخروج للتوزيع')
+    resolution_name = fields.Many2one(
+        'repair.resolution',
+        string='العطل'
+    )
+
+    @api.constrains('product_out_delivery')
+    def product_change_date(self):
+        current_date = datetime.now().date()
+        for rec in self:
+            if rec.product_out_delivery:
+                if rec.product_out_delivery < current_date:
+                    raise ValidationError(_(
+                        " برجاء عدم اختيار تاريخ الخروج التوزيع قبل اليوم"
+                    ))
+
     name = fields.Char(
         'Repair Reference',
         default=lambda self: self.env['ir.sequence'].next_by_code('repair.order'),
         copy=False, required=True,
         states={'confirmed': [('readonly', True)]})
+    category_id = fields.Many2one(
+        'helpdesk.ticket.category', string='المنتج')
     product_id = fields.Many2one(
-        'product.product', string='Product to Repair',
-        readonly=True, required=True, states={'draft': [('readonly', False)]})
+        'product.product', string='Product to Repair',  # product.product
+        readonly=True, states={'draft': [('readonly', False)]})
     product_qty = fields.Float(
         'Product Quantity',
         default=1.0, digits=dp.get_precision('Product Unit of Measure'),
-        readonly=True, required=True, states={'draft': [('readonly', False)]})
+        readonly=True, states={'draft': [('readonly', False)]})
     product_uom = fields.Many2one(
         'uom.uom', 'Product Unit of Measure',
-        readonly=True, required=True, states={'draft': [('readonly', False)]})
+        readonly=True, states={'draft': [('readonly', False)]})
     partner_id = fields.Many2one(
         'res.partner', 'Customer',
         index=True, states={'confirmed': [('readonly', True)]},
@@ -71,7 +95,7 @@ class Repair(models.Model):
     location_id = fields.Many2one(
         'stock.location', 'Location',
         default=_default_stock_location,
-        index=True, readonly=True, required=True,
+        index=True, readonly=True,
         help="This is the location where the product to repair is located.",
         states={'draft': [('readonly', False)], 'confirmed': [('readonly', True)]})
     lot_id = fields.Many2one(
@@ -81,7 +105,9 @@ class Repair(models.Model):
     guarantee_limit = fields.Date('Warranty Expiration', states={'confirmed': [('readonly', True)]})
     operations = fields.One2many(
         'repair.line', 'repair_id', 'Parts',
-        copy=True, readonly=True, states={'draft': [('readonly', False)]})
+        copy=True)
+    # , readonly=True,
+    # states={'draft': [('readonly', False)]}
     pricelist_id = fields.Many2one(
         'product.pricelist', 'Pricelist',
         default=lambda self: self.env['product.pricelist'].search([], limit=1).id,
@@ -115,12 +141,21 @@ class Repair(models.Model):
     amount_tax = fields.Float('Taxes', compute='_amount_tax', store=True)
     amount_total = fields.Float('Total', compute='_amount_total', store=True)
     tracking = fields.Selection('Product Tracking', related="product_id.tracking", readonly=False)
+    product_sn = fields.Char('سريال المنتج')
+    Product_color = fields.Char('لون المنتج')
+    Product_production_date = fields.Date('تاريخ الانتاج')
+    Product_image = fields.Binary('صورة المنتج')
+    warranty_image = fields.Binary('صورة الضمان')
+    plate_image = fields.Binary('صورة اللوحه')
 
     @api.one
     @api.depends('partner_id')
     def _compute_default_address_id(self):
         if self.partner_id:
             self.default_address_id = self.partner_id.address_get(['contact'])['contact']
+
+    def assign_to_me(self):
+        self.write({'user_id': self.env.user.id})
 
     @api.one
     @api.depends('operations.price_subtotal', 'invoice_method', 'fees_lines.price_subtotal', 'pricelist_id.currency_id')
@@ -137,12 +172,15 @@ class Repair(models.Model):
         val = 0.0
         for operation in self.operations:
             if operation.tax_id:
-                tax_calculate = operation.tax_id.compute_all(operation.price_unit, self.pricelist_id.currency_id, operation.product_uom_qty, operation.product_id, self.partner_id)
+                tax_calculate = operation.tax_id.compute_all(operation.price_unit, self.pricelist_id.currency_id,
+                                                             operation.product_uom_qty, operation.product_id,
+                                                             self.partner_id)
                 for c in tax_calculate['taxes']:
                     val += c['amount']
         for fee in self.fees_lines:
             if fee.tax_id:
-                tax_calculate = fee.tax_id.compute_all(fee.price_unit, self.pricelist_id.currency_id, fee.product_uom_qty, fee.product_id, self.partner_id)
+                tax_calculate = fee.tax_id.compute_all(fee.price_unit, self.pricelist_id.currency_id,
+                                                       fee.product_uom_qty, fee.product_id, self.partner_id)
                 for c in tax_calculate['taxes']:
                     val += c['amount']
         self.amount_tax = val
@@ -169,7 +207,8 @@ class Repair(models.Model):
         if not self.product_id or not self.product_uom:
             return res
         if self.product_uom.category_id != self.product_id.uom_id.category_id:
-            res['warning'] = {'title': _('Warning'), 'message': _('The product unit of measure you chose has a different category than the product unit of measure.')}
+            res['warning'] = {'title': _('Warning'), 'message': _(
+                'The product unit of measure you chose has a different category than the product unit of measure.')}
             self.product_uom = self.product_id.uom_id.id
         return res
 
@@ -200,26 +239,29 @@ class Repair(models.Model):
     def action_validate(self):
         self.ensure_one()
         precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
-        available_qty_owner = self.env['stock.quant']._get_available_quantity(self.product_id, self.location_id, self.lot_id, owner_id=self.partner_id, strict=True)
-        available_qty_noown = self.env['stock.quant']._get_available_quantity(self.product_id, self.location_id, self.lot_id, strict=True)
-        for available_qty in [available_qty_owner, available_qty_noown]:
-            if float_compare(available_qty, self.product_qty, precision_digits=precision) >= 0:
-                return self.action_repair_confirm()
-        else:
-            return {
-                'name': _('Insufficient Quantity'),
-                'view_type': 'form',
-                'view_mode': 'form',
-                'res_model': 'stock.warn.insufficient.qty.repair',
-                'view_id': self.env.ref('repair.stock_warn_insufficient_qty_repair_form_view').id,
-                'type': 'ir.actions.act_window',
-                'context': {
-                    'default_product_id': self.product_id.id,
-                    'default_location_id': self.location_id.id,
-                    'default_repair_id': self.id
-                    },
-                'target': 'new'
-            }
+        available_qty_owner = self.env['stock.quant']._get_available_quantity(self.product_id, self.location_id,
+                                                                              self.lot_id, owner_id=self.partner_id,
+                                                                              strict=True)
+        available_qty_noown = self.env['stock.quant']._get_available_quantity(self.product_id, self.location_id,
+                                                                              self.lot_id, strict=True)
+        # for available_qty in [available_qty_owner, available_qty_noown]:
+        #     if float_compare(available_qty, self.product_qty, precision_digits=precision) >= 0:
+        return self.action_repair_confirm()
+        # else:
+        #     return {
+        #         'name': _('Insufficient Quantity'),
+        #         'view_type': 'form',
+        #         'view_mode': 'form',
+        #         'res_model': 'stock.warn.insufficient.qty.repair',
+        #         'view_id': self.env.ref('repair.stock_warn_insufficient_qty_repair_form_view').id,
+        #         'type': 'ir.actions.act_window',
+        #         'context': {
+        #             'default_product_id': self.product_id.id,
+        #             'default_location_id': self.location_id.id,
+        #             'default_repair_id': self.id
+        #         },
+        #         'target': 'new'
+        #     }
 
     @api.multi
     def action_repair_confirm(self):
@@ -301,12 +343,15 @@ class Repair(models.Model):
                     invoice.write({
                         'name': invoice.name + ', ' + repair.name,
                         'origin': invoice.origin + ', ' + repair.name,
-                        'comment': (comment and (invoice.comment and invoice.comment + "\n" + comment or comment)) or (invoice.comment and invoice.comment or ''),
+                        'comment': (comment and (invoice.comment and invoice.comment + "\n" + comment or comment)) or (
+                                invoice.comment and invoice.comment or ''),
                     })
                 else:
                     if not repair.partner_id.property_account_receivable_id:
                         raise UserError(_('No account defined for partner "%s".') % repair.partner_id.name)
-                    fp_id = repair.partner_id.property_account_position_id.id or self.env['account.fiscal.position'].get_fiscal_position(repair.partner_id.id, delivery_id=repair.address_id.id)
+                    fp_id = repair.partner_id.property_account_position_id.id or self.env[
+                        'account.fiscal.position'].get_fiscal_position(repair.partner_id.id,
+                                                                       delivery_id=repair.address_id.id)
                     invoice = Invoice.create({
                         'name': repair.name,
                         'origin': repair.name,
@@ -390,7 +435,7 @@ class Repair(models.Model):
             'view_id': self.env.ref('account.invoice_form').id,
             'target': 'current',
             'res_id': self.invoice_id.id,
-            }
+        }
 
     def action_repair_ready(self):
         self.mapped('operations').write({'state': 'confirmed'})
@@ -437,7 +482,11 @@ class Repair(models.Model):
         for repair in self:
             # Try to create move with the appropriate owner
             owner_id = False
-            available_qty_owner = self.env['stock.quant']._get_available_quantity(repair.product_id, repair.location_id, repair.lot_id, owner_id=repair.partner_id, strict=True)
+            available_qty_owner = self.env['stock.quant']._get_available_quantity(repair.product_id, repair.location_id,
+                                                                                  repair.lot_id,
+                                                                                  owner_id=repair.partner_id,
+                                                                                  strict=True)
+            print(repair.product_id)
             if float_compare(available_qty_owner, repair.product_qty, precision_digits=precision) >= 0:
                 owner_id = repair.partner_id.id
 
@@ -452,41 +501,42 @@ class Repair(models.Model):
                     'location_id': operation.location_id.id,
                     'location_dest_id': operation.location_dest_id.id,
                     'move_line_ids': [(0, 0, {'product_id': operation.product_id.id,
-                                           'lot_id': operation.lot_id.id, 
-                                           'product_uom_qty': 0,  # bypass reservation here
-                                           'product_uom_id': operation.product_uom.id,
-                                           'qty_done': operation.product_uom_qty,
-                                           'package_id': False,
-                                           'result_package_id': False,
-                                           'owner_id': owner_id,
-                                           'location_id': operation.location_id.id, #TODO: owner stuff
-                                           'location_dest_id': operation.location_dest_id.id,})],
+                                              'lot_id': operation.lot_id.id,
+                                              'product_uom_qty': 0,  # bypass reservation here
+                                              'product_uom_id': operation.product_uom.id,
+                                              'qty_done': operation.product_uom_qty,
+                                              'package_id': False,
+                                              'result_package_id': False,
+                                              'owner_id': owner_id,
+                                              'location_id': operation.location_id.id,  # TODO: owner stuff
+                                              'location_dest_id': operation.location_dest_id.id, })],
                     'repair_id': repair.id,
                     'origin': repair.name,
                 })
                 moves |= move
                 operation.write({'move_id': move.id, 'state': 'done'})
-            move = Move.create({
-                'name': repair.name,
-                'product_id': repair.product_id.id,
-                'product_uom': repair.product_uom.id or repair.product_id.uom_id.id,
-                'product_uom_qty': repair.product_qty,
-                'partner_id': repair.address_id.id,
-                'location_id': repair.location_id.id,
-                'location_dest_id': repair.location_id.id,
-                'move_line_ids': [(0, 0, {'product_id': repair.product_id.id,
-                                           'lot_id': repair.lot_id.id, 
-                                           'product_uom_qty': 0,  # bypass reservation here
-                                           'product_uom_id': repair.product_uom.id or repair.product_id.uom_id.id,
-                                           'qty_done': repair.product_qty,
-                                           'package_id': False,
-                                           'result_package_id': False,
-                                           'owner_id': owner_id,
-                                           'location_id': repair.location_id.id, #TODO: owner stuff
-                                           'location_dest_id': repair.location_id.id,})],
-                'repair_id': repair.id,
-                'origin': repair.name,
-            })
+            # move = Move.create({
+            #     'name': repair.name,
+            #     'product_id': repair.product_id.id,
+            #     'product_uom': repair.product_uom.id or repair.product_id.uom_id.id,
+            #     'product_uom_qty': repair.product_qty,
+            #     'partner_id': repair.address_id.id,
+            #     'location_id': repair.location_id.id,
+            #     'location_dest_id': repair.location_id.id,
+            #     'move_line_ids': [(0, 0, {'product_id': repair.product_id.id,
+            #                               'lot_id': repair.lot_id.id,
+            #                               'product_uom_qty': 0,  # bypass reservation here
+            #                               'product_uom_id': repair.product_uom.id or repair.product_id.uom_id.id,
+            #                               'qty_done': repair.product_qty,
+            #                               'package_id': False,
+            #                               'result_package_id': False,
+            #                               'owner_id': owner_id,
+            #                               'location_id': repair.location_id.id,  # TODO: owner stuff
+            #                               'location_dest_id': repair.location_id.id, })],
+            #     'repair_id': repair.id,
+            #     'origin': repair.name,
+            # })
+
             consumed_lines = moves.mapped('move_line_ids')
             produced_lines = move.move_line_ids
             moves |= move
@@ -540,15 +590,17 @@ class RepairLine(models.Model):
         copy=False, readonly=True, required=True,
         help='The status of a repair line is set automatically to the one of the linked repair order.')
 
-    @api.constrains('lot_id', 'product_id')
-    def constrain_lot_id(self):
-        for line in self.filtered(lambda x: x.product_id.tracking != 'none' and not x.lot_id):
-            raise ValidationError(_("Serial number is required for operation line with product '%s'") % (line.product_id.name))
+    # @api.constrains('lot_id', 'product_id')
+    # def constrain_lot_id(self):
+    #     for line in self.filtered(lambda x: x.product_id.tracking != 'none' and not x.lot_id):
+    #         raise ValidationError(
+    #             _("Serial number is required for operation line with product '%s'") % (line.product_id.name))
 
     @api.one
     @api.depends('price_unit', 'repair_id', 'product_uom_qty', 'product_id', 'repair_id.invoice_method')
     def _compute_price_subtotal(self):
-        taxes = self.tax_id.compute_all(self.price_unit, self.repair_id.pricelist_id.currency_id, self.product_uom_qty, self.product_id, self.repair_id.partner_id)
+        taxes = self.tax_id.compute_all(self.price_unit, self.repair_id.pricelist_id.currency_id, self.product_uom_qty,
+                                        self.product_id, self.repair_id.partner_id)
         self.price_subtotal = taxes['total_excluded']
 
     @api.onchange('type', 'repair_id')
@@ -598,7 +650,8 @@ class RepairLine(models.Model):
                 fp = partner.property_account_position_id
                 if not fp:
                     # Check automatic detection
-                    fp_id = self.env['account.fiscal.position'].get_fiscal_position(partner.id, delivery_id=self.repair_id.address_id.id)
+                    fp_id = self.env['account.fiscal.position'].get_fiscal_position(partner.id,
+                                                                                    delivery_id=self.repair_id.address_id.id)
                     fp = self.env['account.fiscal.position'].browse(fp_id)
                 self.tax_id = fp.map_tax(self.product_id.taxes_id, self.product_id, partner).ids
             warning = False
@@ -616,12 +669,14 @@ class RepairLine(models.Model):
         partner = self.repair_id.partner_id
         pricelist = self.repair_id.pricelist_id
         if pricelist and self.product_id and self.type != 'remove':
-            price = pricelist.get_product_price(self.product_id, self.product_uom_qty, partner, uom_id=self.product_uom.id)
+            price = pricelist.get_product_price(self.product_id, self.product_uom_qty, partner,
+                                                uom_id=self.product_uom.id)
             if price is False:
                 warning = {
                     'title': _('No valid pricelist line found.'),
                     'message':
-                        _("Couldn't find a pricelist line matching this product and quantity.\nYou have to change either the product, the quantity or the pricelist.")}
+                        _("Couldn't find a pricelist line matching this product and quantity.\nYou have to change "
+                          "either the product, the quantity or the pricelist.")}
                 return {'warning': warning}
             else:
                 self.price_unit = price
@@ -636,7 +691,8 @@ class RepairFee(models.Model):
         index=True, ondelete='cascade', required=True)
     name = fields.Text('Description', index=True, required=True)
     product_id = fields.Many2one('product.product', 'Product')
-    product_uom_qty = fields.Float('Quantity', digits=dp.get_precision('Product Unit of Measure'), required=True, default=1.0)
+    product_uom_qty = fields.Float('Quantity', digits=dp.get_precision('Product Unit of Measure'), required=True,
+                                   default=1.0)
     price_unit = fields.Float('Unit Price', required=True)
     product_uom = fields.Many2one('uom.uom', 'Product Unit of Measure', required=True)
     price_subtotal = fields.Float('Subtotal', compute='_compute_price_subtotal', store=True, digits=0)
@@ -647,7 +703,8 @@ class RepairFee(models.Model):
     @api.one
     @api.depends('price_unit', 'repair_id', 'product_uom_qty', 'product_id')
     def _compute_price_subtotal(self):
-        taxes = self.tax_id.compute_all(self.price_unit, self.repair_id.pricelist_id.currency_id, self.product_uom_qty, self.product_id, self.repair_id.partner_id)
+        taxes = self.tax_id.compute_all(self.price_unit, self.repair_id.pricelist_id.currency_id, self.product_uom_qty,
+                                        self.product_id, self.repair_id.partner_id)
         self.price_subtotal = taxes['total_excluded']
 
     @api.onchange('repair_id', 'product_id', 'product_uom_qty')
@@ -664,7 +721,8 @@ class RepairFee(models.Model):
             fp = partner.property_account_position_id
             if not fp:
                 # Check automatic detection
-                fp_id = self.env['account.fiscal.position'].get_fiscal_position(partner.id, delivery_id=self.repair_id.address_id.id)
+                fp_id = self.env['account.fiscal.position'].get_fiscal_position(partner.id,
+                                                                                delivery_id=self.repair_id.address_id.id)
                 fp = self.env['account.fiscal.position'].browse(fp_id)
             self.tax_id = fp.map_tax(self.product_id.taxes_id, self.product_id, partner).ids
         if self.product_id:
@@ -694,7 +752,8 @@ class RepairFee(models.Model):
         partner = self.repair_id.partner_id
         pricelist = self.repair_id.pricelist_id
         if pricelist and self.product_id:
-            price = pricelist.get_product_price(self.product_id, self.product_uom_qty, partner, uom_id=self.product_uom.id)
+            price = pricelist.get_product_price(self.product_id, self.product_uom_qty, partner,
+                                                uom_id=self.product_uom.id)
             if price is False:
                 warning = {
                     'title': _('No valid pricelist line found.'),

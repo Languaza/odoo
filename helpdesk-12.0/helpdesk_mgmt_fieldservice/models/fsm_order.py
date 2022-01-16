@@ -14,6 +14,17 @@ class FSMOrder(models.Model):
 
     ticket_id = fields.Many2one('helpdesk.ticket', string='Ticket',
                                 track_visibility='onchange')
+    category_id = fields.Many2one('helpdesk.ticket.category', string='اسم المنتج',
+                                  track_visibility='onchange')
+    partner_id = fields.Many2one('res.partner', string='العميل')
+    partner_email = fields.Char(related='partner_id.email', string="البريد الألكتروني للعميل")
+    partner_phone = fields.Char(related='partner_id.phone', string="رقم العميل")
+    partner_mobile = fields.Char(related='partner_id.mobile', string="رقم موبايل العميل")
+    partner_street = fields.Char(related='partner_id.street', string="عنوان العميل")
+    partner_street2 = fields.Char(related='partner_id.street2', string="عنوان العميل 2")
+    partner_city = fields.Char(related='partner_id.city', string="مدينه")
+    partner_zip = fields.Char(related='partner_id.zip', string="الرقم الريدي للعميل")
+    partner_state = fields.Many2one('res.country.state', string='محافظه العميل', related="partner_id.state_id")
 
     def action_complete(self):
         res = super().action_complete()

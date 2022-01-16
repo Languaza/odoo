@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+      <record id="resolution_tree" model="ir.ui.view">
+        <field name="name">repair.resolution.tree</field>
+        <field name="model">repair.resolution</field>
+        <field name="arch" type="xml">
+            <tree string="Resolutions">
+                <field name="resolution_name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="resolution_form" model="ir.ui.view">
+        <field name="name">repair.resolution.form </field>
+        <field name="model">repair.resolution</field>
+        <field name="arch" type="xml">
+            <form string="Resolutions">
+                <header>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <group>
+                                <field name="resolution_name"/>
+                            </group>
+                        </h1>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_resolution" model="ir.actions.act_window">
+        <field name="name">Resolutions</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">repair.resolution</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first resolution
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="resolution" name="Resolution" parent="menu_repair_order" action="action_resolution"/>
+</odoo>

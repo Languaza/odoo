@@ -8,7 +8,33 @@
         <field name="inherit_id" ref="fieldservice.fsm_order_form"/>
         <field name="arch" type="xml">
             <field name="template_id" position="after">
-                <field name="ticket_id"/>
+                <field name="ticket_id" readonly="1"/>
+                <field name="category_id" readonly="1"/>
+                <field name="partner_id" readonly="1"/>
+                <field name="partner_email"/>
+                <field name="partner_phone"/>
+                <field name="partner_mobile"/>
+                <field name="partner_street"/>
+                <field name="partner_street2"/>
+                <field name="partner_city"/>
+                <field name="partner_zip"/>
+                <field name="partner_state"/>
+            </field>
+        </field>
+    </record>
+
+
+
+       <record id="fsm_order_search_view_inherit" model="ir.ui.view">
+        <field name="name">fsm.order.search.inherit</field>
+        <field name="model">fsm.order</field>
+        <field name="inherit_id" ref="fieldservice.fsm_order_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="stage_id" position="before">
+                <field name="partner_id"/>
+                <field name="partner_phone"/>
+                <field name="partner_mobile"/>
+                <field name="partner_street"/>
             </field>
         </field>
     </record>

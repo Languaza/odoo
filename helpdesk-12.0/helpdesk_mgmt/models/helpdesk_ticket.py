@@ -16,7 +16,7 @@ class HelpdeskTicket(models.Model):
     active = fields.Boolean(default=True)
     number = fields.Char(string='Ticket number', default="/",
                          readonly=True)
-    name = fields.Char(string='Title', required=True)
+    name = fields.Char(string='Title', required=True, readonly=True, default='بلاغ جديد')
     description = fields.Html(required=True, sanitize_style=True)
     user_id = fields.Many2one(
         'res.users',
@@ -42,6 +42,13 @@ class HelpdeskTicket(models.Model):
     partner_id = fields.Many2one('res.partner')
     partner_name = fields.Char()
     partner_email = fields.Char()
+    partner_phone = fields.Char()
+    partner_mobile = fields.Char()
+    partner_street = fields.Char()
+    partner_street2 = fields.Char()
+    partner_city = fields.Char()
+    partner_zip = fields.Char()
+    partner_state = fields.Many2one('res.country.state', string='Partner State')
 
     last_stage_update = fields.Datetime(
         string='Last Stage Update',
@@ -128,7 +135,13 @@ class HelpdeskTicket(models.Model):
         if self.partner_id:
             self.partner_name = self.partner_id.name
             self.partner_email = self.partner_id.email
-
+            self.partner_phone = self.partner_id.phone
+            self.partner_mobile = self.partner_id.mobile
+            self.partner_street = self.partner_id.street
+            self.partner_street2 = self.partner_id.street2
+            self.partner_city = self.partner_id.city
+            self.partner_state = self.partner_id.state_id
+            self.partner_zip = self.partner_id.zip
     @api.multi
     @api.onchange('team_id', 'user_id')
     def _onchange_dominion_user_id(self):

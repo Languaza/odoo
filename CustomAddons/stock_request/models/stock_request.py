@@ -108,6 +108,9 @@ class StockRequest(models.Model):
     product_id = fields.Many2one(
         states={'draft': [('readonly', False)]}, readonly=True
     )
+    cost = fields.Float(
+        states={'draft': [('readonly', False)]}, readonly=True
+    )
     product_uom_id = fields.Many2one(
         states={'draft': [('readonly', False)]}, readonly=True
     )

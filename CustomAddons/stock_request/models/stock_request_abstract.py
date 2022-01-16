@@ -47,6 +47,7 @@ class StockRequest(models.AbstractModel):
         domain=[('type', 'in', ['product', 'consu'])], ondelete='cascade',
         required=True,
     )
+    cost = fields.Float(related='product_id.list_price', string="سعر المنتج")
     allow_virtual_location = fields.Boolean(
         related='company_id.stock_request_allow_virtual_loc',
         readonly=True,

@@ -24,8 +24,7 @@ class HelpdeskTicket(models.Model):
                     closed_orders = \
                         rec.fsm_order_ids.filtered(
                             lambda x: x.stage_id.is_closed)
-                    if (len(closed_orders.ids) != len(rec.fsm_order_ids)):
-
+                    if len(closed_orders.ids) != len(rec.fsm_order_ids):
                         raise ValidationError(
                             _('Please complete all service orders '
                               'related to this ticket to close it.'))
@@ -72,7 +71,9 @@ class HelpdeskTicket(models.Model):
             'default_ticket_id': self.id,
             'default_priority': self.priority,
             'default_location_id': self.fsm_location_id.id,
-            'default_origin': self.name
+            'default_origin': self.name,
+            'default_category_id': self.category_id.id,
+            'default_partner_id': self.partner_id.id
         }
         res = self.env.ref('fieldservice.fsm_order_form', False)
         result['views'] = [(res and res.id or False, 'form')]

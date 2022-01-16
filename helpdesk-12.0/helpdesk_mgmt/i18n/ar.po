@@ -2258,3 +2258,9 @@ msgstr "سجل اتصال الموقع"
 #~ msgstr ""
 #~ "يتم طي هذه الحالة مرة أخرى في عرض كانبان في حالة عدم وجود سجلات "
 #~ "تظهر فيه."
+
+#. module: helpdesk_mgmt
+#: model:ir.model.fields,field_description:helpdesk_mgmt.field_helpdesk_ticket__partner_id
+#: model_terms:ir.ui.view,arch_db:helpdesk_mgmt.helpdesk_ticket_view_search
+#~msgid "Partner Phone"
+#~msgstr "رقم العميل"

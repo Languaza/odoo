@@ -88,14 +88,23 @@
                             <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
                             <field name="create_date" readonly="1"/>
                             <field name="channel_id"/>
-                        </group>
-                        <group>
-                            <field name="partner_id"/>
-                            <field name="partner_name"/>
-                            <field name="partner_email"/>
                             <field name="category_id"/>
                             <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
                             <field name="sequence" groups="base.group_no_one"/>
+                        </group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="partner_name" related="partner_id"/>
+                            <field name="partner_email" related="partner_id"/>
+                            <field name="partner_phone" related="partner_id" string="رقم العميل"/>
+                            <field name="partner_mobile" related="partner_id" string="رقم موبايل العميل"/>
+                            <field name="partner_street" related="partner_id" string="شارع"/>
+                            <field name="partner_street2" related="partner_id" string="شارع 2"/>
+                            <field name="partner_city" related="partner_id" string="المدينه"/>
+                            <field name="partner_zip" related="partner_id" string="الرقم البريدي"/>
+                            <field name="partner_state" related="partner_id" string="المحافظه"/>
+
+
                         </group>
                     </group>
                     <group>

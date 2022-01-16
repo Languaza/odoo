@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             <tree string="Repairs order" decoration-muted="state in ('done','cancel')" decoration-info="state=='draft'">
                 <field name="name" />
-                <field name="product_id" />
+                <field name="product_id"  />
                 <field name="partner_id"/>
                 <field name="address_id"/>
                 <field name="company_id" groups="base.group_multi_company" invisible="1"/>
@@ -26,6 +26,10 @@
                <header>
                    <button name="action_send_mail" states="draft" string="Send Quotation" type="object"/>
                    <button name="print_repair_order" states="draft" string="Print Quotation" type="object"/>
+                   <button string="اسنده الي"
+                            name="assign_to_me"
+                            type="object"
+                            attrs="{'invisible' : [('user_id', '!=', False)]}"/>
                    <button name="action_validate" states="draft" type="object" string="Confirm Repair" class="oe_highlight"/>
                    <button name="action_repair_start" attrs="{'invisible': ['&amp;', ('state','!=','confirmed'), '!', '&amp;', ('state','=','ready'), ('invoice_method','=','b4repair')]}"
                     type="object" string="Start Repair" class="oe_highlight"/>
@@ -52,23 +56,37 @@
                     <group>
                         <group>
                             <field name="tracking" invisible="1" attrs="{'readonly': 1}"/>
-                            <field name="product_id" domain="[('type', 'in', ['product', 'consu'])]"/>
-                            <label for="product_qty"/>
+                            <field name="category_id" attrs="{'readonly': 1}"/>
+                            <field name="user_id" />
+                            <field name="product_id" invisible="1" domain="[('type', 'in', ['product', 'consu'])]"/>
+                            <label for="product_qty" invisible="1"/>
                             <div class="o_row">
-                                <field name="product_qty"/>
-                                <field name="product_uom" groups="uom.group_uom"/>
+                                <field name="product_qty" invisible="1"/>
+                                <field name="product_uom" groups="uom.group_uom" invisible="1"/>
                             </div>
-                            <field name="lot_id" domain="[('product_id', '=', product_id)]" context="{'default_product_id': product_id}" groups="stock.group_production_lot" attrs="{'required': [('tracking', '!=', 'none')], 'readonly': [('state', '=', 'done')]}"/>
+                            <!--<field name="lot_id" domain="[('product_id', '=', product_id)]" context="{'default_product_id': product_id}" invisible="1" groups="stock.group_production_lot" attrs="{'required': [('tracking', '!=', 'none')], 'readonly': [('state', '=', 'done')]}"/>-->
                             <field name="partner_id" widget="res_partner_many2one" attrs="{'required':[('invoice_method','!=','none')]}" context="{'show_vat': True}"/>
                             <field name="address_id" groups="sale.group_delivery_invoice_address"/>
+                            <field name="product_entry_date" options="{'datepicker':{'minDate': 0}}"/>
+                            <field name="product_exit_date" options="{'datepicker':{'minDate': 0}}"/>
+                            <field name="product_out_delivery" options="{'datepicker':{'minDate': 0}}"/>
                         </group>
                         <group>
                             <field name="location_id"/>
                             <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
                             <field name="guarantee_limit"/>
+                            <field name="factory_send_date" />
+                            <field name="factory_return_date"/>
                             <field name="invoice_method"/>
                             <field name="partner_invoice_id" attrs="{'invisible':[('invoice_method','=', 'none')],'required':[('invoice_method','!=','none')]}" groups="sale.group_delivery_invoice_address"/>
                             <field name="pricelist_id" groups="product.group_sale_pricelist" context="{'product_id':product_id}" attrs="{'invisible':[('invoice_method','=', 'none')]}"/>
+                            <field name="resolution_name"/>
+                            <field name="product_sn"/>
+                            <field name="Product_color"/>
+                            <field name="Product_production_date"/>
+                            <field name="Product_image"/>
+                            <field name="warranty_image"/>
+                            <field name="plate_image"/>
                         </group>
                     </group>
                 <notebook>
@@ -132,8 +150,8 @@
                         </group>
                         <div class="oe_clear"/>
                     </page>
-                    <page string="Operations">
-                        <!-- <field name="invoice_id"/> -->
+                    <!--<page string="Operations">
+                         <field name="invoice_id"/>
                         <field name="fees_lines">
                             <form string="Fees">
                                 <group>
@@ -159,7 +177,7 @@
                                 <field name="price_subtotal" widget="monetary"/>
                             </tree>
                         </field>
-                    </page>
+                    </page>-->
                     <page string="Extra Info" groups="base.group_no_one">
                         <group>
                             <group>
@@ -290,5 +308,6 @@
         <menuitem action="action_repair_order_tree" id="menu_repair_order" groups="stock.group_stock_user" name="Repairs" sequence="36"
             web_icon="repair,static/description/icon.png"/>
 
+       
     </data>
 </odoo>

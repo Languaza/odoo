@@ -478,7 +478,7 @@ msgstr "ابناء"
 #. module: fieldservice
 #: model:ir.model.fields,help:fieldservice.field_fsm_template__team_id
 msgid "Choose a team to be set on orders of this template"
-msgstr "اختر فريقًا لتعيينه في الطلبات من هذا النموذج"
+msgstr "اختر فريقًا لتعيينه في الطلبات من هذه الشكوي"
 
 #. module: fieldservice
 #: model:ir.model.fields,field_description:fieldservice.field_fsm_location__city
@@ -599,7 +599,7 @@ msgstr "شركة مرتبطة بهذا الفريق"
 #. module: fieldservice
 #: model:ir.model.fields,help:fieldservice.field_fsm_template__company_id
 msgid "Company related to this template"
-msgstr "شركة مرتبطة بهذا النموذج"
+msgstr "شركة مرتبطة بهذه الشكوي"
 
 #. module: fieldservice
 #: model_terms:ir.ui.view,arch_db:fieldservice.fsm_order_form
@@ -732,7 +732,7 @@ msgstr "انشاء طلب."
 #. module: fieldservice
 #: model_terms:ir.actions.act_window,help:fieldservice.action_fsm_template
 msgid "Create an order template"
-msgstr "انشاء نموذج طلب"
+msgstr "انشاء شكوي عملاء "
 
 #. module: fieldservice
 #: model_terms:ir.ui.view,arch_db:fieldservice.res_config_settings_view_form
@@ -1118,12 +1118,12 @@ msgstr "اوامر الخدمة الميدانية"
 #. module: fieldservice
 #: model:ir.model,name:fieldservice.model_fsm_template
 msgid "Field Service Order Template"
-msgstr "نموذج اوامر الخدمة الميدانية"
+msgstr "شكاوي عملاء الخدمة الميدانية"
 
 #. module: fieldservice
 #: model:ir.model,name:fieldservice.model_fsm_order_type
 msgid "Field Service Order Type"
-msgstr "نوع طلب الخدمة الميدانية"
+msgstr "طلب عميل الخدمة الميدانية"
 
 #. module: fieldservice
 #: model:ir.model,name:fieldservice.model_fsm_stage
@@ -1720,7 +1720,7 @@ msgstr "ادارة معدات الخدمة الميدانية"
 #. module: fieldservice
 #: model:res.groups,name:fieldservice.group_fsm_template
 msgid "Manage Field Service Order Templates"
-msgstr "ادارة نموذج طلبات الخدمة الميدانية"
+msgstr "ادارة شكاوي طلبات طلبات الخدمة الميدانية"
 
 #. module: fieldservice
 #: model:res.groups,name:fieldservice.group_fsm_tag
@@ -1795,7 +1795,7 @@ msgstr "إدارة الفرق"
 #. module: fieldservice
 #: model:ir.model.fields,field_description:fieldservice.field_res_config_settings__group_fsm_template
 msgid "Manage Template"
-msgstr "ادارة النموذج"
+msgstr "ادارة شكاوي العملاء"
 
 #. module: fieldservice
 #: model:ir.model.fields,field_description:fieldservice.field_res_config_settings__module_fieldservice_vehicle
@@ -1882,7 +1882,7 @@ msgstr "ادارة الشعارات فى خدمة الطلابات"
 #. module: fieldservice
 #: model_terms:ir.ui.view,arch_db:fieldservice.res_config_settings_view_form
 msgid "Manage templates"
-msgstr "ادارة النماذج"
+msgstr "ادارة شكاوي العملاء"
 
 #. module: fieldservice
 #: model_terms:ir.ui.view,arch_db:fieldservice.res_config_settings_view_form
@@ -2161,7 +2161,7 @@ msgstr "فريق الطلابات"
 #. module: fieldservice
 #: model:ir.actions.act_window,name:fieldservice.action_fsm_template
 msgid "Order Templates"
-msgstr "طلب نماذج"
+msgstr "شكاوي العملاء"
 
 #. module: fieldservice
 #: model:ir.actions.act_window,name:fieldservice.action_fsm_order_type
@@ -2379,7 +2379,7 @@ msgstr "المشاريع والمهام"
 #. module: fieldservice
 #: model:ir.model.fields,field_description:fieldservice.field_fsm_wizard__fsm_record_type
 msgid "Record Type"
-msgstr "نوع الطلب"
+msgstr "طلبات الملاء"
 
 #. module: fieldservice
 #: model:ir.model,name:fieldservice.model_fsm_region
@@ -2820,12 +2820,12 @@ msgstr "فرق"
 #. module: fieldservice
 #: model:ir.model.fields,field_description:fieldservice.field_fsm_order__template_id
 msgid "Template"
-msgstr "نموذج"
+msgstr "شكوي العميل"
 
 #. module: fieldservice
 #: model:ir.ui.menu,name:fieldservice.menu_fsm_template
 msgid "Templates"
-msgstr "نماذج"
+msgstr "شكاوي العملاء"
 
 #. module: fieldservice
 #: model:ir.actions.act_window,name:fieldservice.action_fsm_territory
@@ -2979,7 +2979,7 @@ msgstr "طلبات اليوم"
 #: model_terms:ir.ui.view,arch_db:fieldservice.fsm_order_type_form_view
 #: model_terms:ir.ui.view,arch_db:fieldservice.fsm_stage_search_view
 msgid "Type"
-msgstr "نوع"
+msgstr "طلب العميل"
 
 #. module: fieldservice
 #: model_terms:ir.ui.view,arch_db:fieldservice.fsm_order_search_view
@@ -3234,12 +3234,12 @@ msgstr "شعارات"
 #. module: fieldservice
 #: model_terms:ir.ui.view,arch_db:fieldservice.fsm_template_form_view
 msgid "template"
-msgstr "نموذج"
+msgstr "شكوي العميل"
 
 #. module: fieldservice
 #: model_terms:ir.ui.view,arch_db:fieldservice.fsm_template_tree_view
 msgid "templates"
-msgstr "نماذج"
+msgstr "شكاوي العملاء"
 
 #~ msgid "# Meetings"
 #~ msgstr "# اجتماعات"

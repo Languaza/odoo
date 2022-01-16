@@ -7,6 +7,13 @@
         <field name="model">fsm.order</field>
         <field name="inherit_id" ref="fieldservice.fsm_order_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//form/header" position="inside">
+                <button id="repair"
+                            name="repair" string="سحب للورشه"
+                            class="oe_highlight"
+                            type="object"
+                            />
+            </xpath>
             <field name="priority" position="before">
                 <field name="internal_type" invisible="1"/>
                 <field name="repair_id"

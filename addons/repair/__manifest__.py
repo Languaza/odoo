@@ -29,6 +29,7 @@ The following topics are covered by this module:
         'wizard/repair_make_invoice_views.xml',
         'wizard/stock_warn_insufficient_qty_views.xml',
         'views/repair_views.xml',
+        'views/resolution.xml',
         'report/repair_reports.xml',
         'report/repair_templates_repair_order.xml',
         'data/ir_sequence_data.xml',
