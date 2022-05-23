@@ -8,8 +8,8 @@ class FSMLocation(models.Model):
     _inherit = 'fsm.location'
 
     inventory_location_id = fields.Many2one(
-        'stock.location', string='Inventory Location', required=True,
-        default=lambda self: self.env.ref('stock.stock_location_customers'))
+        'stock.location', string='Inventory Location',
+        default='Partner Locations/Customers')
     shipping_address_id = fields.Many2one('res.partner',
                                           string='Shipping Location')
 

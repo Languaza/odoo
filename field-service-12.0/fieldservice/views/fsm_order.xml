@@ -37,9 +37,7 @@
                             <field name="type"  options="{'no_create': True, 'no_open': True}"/>
                             <field name="template_id" groups="fieldservice.group_fsm_template"/>
                             <field name="priority" widget="priority"/>
-                            <field name="tag_ids"
-                                   widget="many2many_tags"
-                                   options="{'color_field': 'color', 'no_create_edit': True}"/>
+                            <field name="tag_ids"/>
                         </group>
                         <group>
                             <field name="location_id" />
@@ -69,7 +67,7 @@
                                    groups="base.group_multi_company"/>
                         </group>
                         <group>
-                            <field name="image" widget="signature" attrs="{'readonly': [('image', '!=', False)]}" force_save="1" />
+                            <field name="image" widget="signature" attrs="{'readonly': [('image', '!=', False)]}" force_save="1"/>
 
                         </group>
                     </group>
@@ -233,9 +231,7 @@
                                     </strong>
                                 </div>
                                 <div>
-                                    <field name="tag_ids"
-                                           widget="many2many_tags"
-                                           options="{'color_field': 'color'}"/>
+                                    <field name="tag_ids"/>
                                 </div>
                                 <div>
                                     <field name="location_id"/>

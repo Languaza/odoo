@@ -44,6 +44,7 @@ class FSMOrder(models.Model):
             'category_id': self.category_id.id,
             'product_qty': 1,
             'invoice_method': 'none',
+            'partner_id': self.partner_id.id,
             'internal_notes': self.description,
             'guarantee_limit': self.guarantee_limit,
             'product_sn': self.product_sn,

@@ -5,7 +5,6 @@ from odoo import _, api, fields, models
 
 from odoo.exceptions import UserError
 
-
 REQUEST_STATES = [
     ('draft', 'Draft'),
     ('submitted', 'Submitted'),
@@ -22,6 +21,7 @@ class FSMOrder(models.Model):
     request_stage = fields.Selection(REQUEST_STATES, string='Request State',
                                      default='draft', readonly=True,
                                      store=True)
+    amount_untaxed = fields.Float('أجمالي المبلغ', compute='_amount_untaxed', store=True, readonly=True)
 
     @api.multi
     def action_request_submit(self):
@@ -35,6 +35,7 @@ class FSMOrder(models.Model):
                     else:
                         line.action_submit()
             rec.request_stage = 'submitted'
+            print(rec)
 
     @api.multi
     def action_request_cancel(self):
@@ -61,3 +62,12 @@ class FSMOrder(models.Model):
                     else:
                         line.action_draft()
             rec.request_stage = 'draft'
+
+    @api.onchange('stock_request_ids')
+    def _amount_untaxed(self):
+        self.amount_untaxed = 0
+        for rec in self:
+            for line in rec.stock_request_ids:
+                self.amount_untaxed += (line.cost * line.product_uom_qty)
+        
+

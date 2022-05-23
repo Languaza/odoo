@@ -354,8 +354,42 @@ class FSMOrder(models.Model):
                 vals['scheduled_date_end'] = str(date_to_with_delta)
 
     def action_complete(self):
-        return self.write({'stage_id': self.env.ref(
-            'fieldservice.fsm_stage_completed').id, 'is_button': True})
+        for rec in self:
+            if rec.product_sn is False:
+                raise ValidationError(_(
+                    " برجاء عدم ترك خانة سريال المنتج فارغه"
+                ))
+            elif rec.Product_color is False:
+                raise ValidationError(_(
+                    " برجاء عدم ترك خانة لون المنتج فارغه"
+                ))
+            elif rec.Product_production_date is False:
+                raise ValidationError(_(
+                    " برجاء عدم ترك خانة تاريخ الأنتاج فارغه"
+                ))
+            elif rec.guarantee_limit is False:
+                raise ValidationError(_(
+                    " برجاء عدم ترك خانة تاريخ إنتهاء الضمان فارغه"
+                ))
+            elif rec.Product_image is None:
+                raise ValidationError(_(
+                    " برجاء عدم ترك خانة صورة المنتج فارغه"
+                ))
+            elif rec.warranty_image is None:
+                raise ValidationError(_(
+                    " برجاء عدم ترك خانة صورة الضمان فارغه"
+                ))
+            elif rec.plate_image is None:
+                raise ValidationError(_(
+                    " برجاء عدم ترك خانة صورة اللوحه فارغه"
+                ))
+            elif rec.image is None:
+                raise ValidationError(_(
+                    " برجاء عدم ترك خانة صورة اللوحه فارغه"
+                ))
+            else:
+                return self.write({'stage_id': self.env.ref(
+                    'fieldservice.fsm_stage_completed').id, 'is_button': True})
 
     def action_cancel(self):
         return self.write({'stage_id': self.env.ref(

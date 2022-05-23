@@ -39,12 +39,12 @@ class HelpdeskTicket(models.Model):
         default=_get_default_stage_id,
         track_visibility='onchange',
     )
-    partner_id = fields.Many2one('res.partner')
+    partner_id = fields.Many2one('res.partner',required=True)
     partner_name = fields.Char()
     partner_email = fields.Char()
-    partner_phone = fields.Char()
-    partner_mobile = fields.Char()
-    partner_street = fields.Char()
+    partner_phone = fields.Char(required=True)
+    partner_mobile = fields.Char(required=True)
+    partner_street = fields.Char(required=True)
     partner_street2 = fields.Char()
     partner_city = fields.Char()
     partner_zip = fields.Char()
@@ -58,7 +58,7 @@ class HelpdeskTicket(models.Model):
     closed_date = fields.Datetime(string='Closed Date')
     closed = fields.Boolean(related='stage_id.closed')
     unattended = fields.Boolean(related='stage_id.unattended', store=True)
-    tag_ids = fields.Many2many('helpdesk.ticket.tag')
+    tag_ids = fields.Many2one('helpdesk.ticket.tag')
     company_id = fields.Many2one(
         'res.company',
         string="Company",
@@ -68,10 +68,12 @@ class HelpdeskTicket(models.Model):
     channel_id = fields.Many2one(
         'helpdesk.ticket.channel',
         string='Channel',
+        required=True,
         help='Channel indicates where the source of a ticket'
              'comes from (it could be a phone call, an email...)',
     )
     category_id = fields.Many2one('helpdesk.ticket.category',
+                                  required=True,
                                   string='Category')
     team_id = fields.Many2one('helpdesk.ticket.team')
     priority = fields.Selection(selection=[
@@ -206,6 +208,24 @@ class HelpdeskTicket(models.Model):
         for ticket in self:
             now = fields.Datetime.now()
             if vals.get('stage_id'):
+                if vals.get('stage_id') == 4:
+                    for rec in self:
+                        if rec.channel_id is False:
+                            raise ValidationError(_(
+                                " برجاء عدم ترك خانة مصدر المكالمه فارغه"
+                            ))
+                        elif rec.category_id is False:
+                            raise ValidationError(_(
+                                " برجاء عدم ترك خانة المنتج فارغه"
+                            ))
+                        elif rec.partner_phone is False:
+                            raise ValidationError(_(
+                                " برجاء عدم ترك خانة رقم العميل فارغه"
+                            ))
+                        elif rec.partner_mobile is False:
+                            raise ValidationError(_(
+                                " برجاء عدم ترك خانة رقم موبايل العميل فارغه"
+                            ))
                 stage_obj = self.env['helpdesk.ticket.stage'].browse(
                     [vals['stage_id']])
                 vals['last_stage_update'] = now

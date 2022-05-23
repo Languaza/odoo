@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-        <template id="auth_signup.login" inherit_id="web.login" name="Sign up - Reset Password">
+<!--        <template id="auth_signup.login" inherit_id="web.login" name="Sign up - Reset Password">
             <xpath expr="//button[@type='submit']" position="after">
                 <div class="justify-content-between mt-2 d-flex small">
                     <a t-if="signup_enabled" t-attf-href="/web/signup?{{ keep_query() }}">Don't have an account?</a>
@@ -8,7 +8,7 @@
                 </div>
             </xpath>
         </template>
-
+-->
         <template id="auth_signup.fields" name="Auth Signup/ResetPassword form fields">
 
             <div class="form-group field-login">
