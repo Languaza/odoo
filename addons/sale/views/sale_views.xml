@@ -281,6 +281,8 @@
                             <field name="pricelist_id" groups="product.group_sale_pricelist"/>
                             <field name="currency_id" invisible="1"/>
                             <field name="payment_term_id" options="{'no_create': True}"/>
+                            <field name="cc_code" attrs="{'invisible': [('state', 'in', ['sale', 'done'])]}"/>
+                            <field name="ccc" invisible="0"/>
                         </group>
                     </group>
                     <notebook>

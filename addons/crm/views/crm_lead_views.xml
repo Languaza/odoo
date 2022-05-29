@@ -546,6 +546,9 @@
                                 <field name="phone"
                                        attrs="{'invisible': [('partner_address_phone', '!=', False)]}"
                                        widget="phone"/>
+                                <field name="seller_info"/>
+                                <field name="display_images" widget="many2many_binary"/>
+                                <field name="store_entry"/>
                             </group>
 
                             <group>
